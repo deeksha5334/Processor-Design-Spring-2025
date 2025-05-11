@@ -21,7 +21,7 @@ module tb_program2;
         // Initialize inputs
         reset = 1;
         
-        // Apply reset for a few clock cycles
+
         #20;
         reset = 0;
         
