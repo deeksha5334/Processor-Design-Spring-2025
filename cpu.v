@@ -1,10 +1,10 @@
-// Fixed Top-level CPU module for the 37-bit ISA processor
+
 module cpu (
-    input clk,                 // Clock signal
-    input reset                // Reset signal
+    input clk,      
+    input reset             
 );
 
-    // Program counter and instruction memory connections
+
     wire [9:0] pc;
     wire [36:0] instruction;
     
@@ -37,18 +37,17 @@ module cpu (
     wire [47:0] rs2_data;
     wire [47:0] write_data;
     
-    // ALU signals
+
     wire [47:0] alu_in2;
     wire [47:0] alu_result;
     wire zero;
     
-    // Data memory signals
+
     wire [47:0] mem_read_data;
-    
-    // Sign extension for immediate values
+
     wire [47:0] sign_extended_imm = {{32{immediate[15]}}, immediate};
     
-    // Program counter module
+
     program_counter pc_unit (
         .clk(clk),
         .reset(reset),
@@ -60,14 +59,14 @@ module cpu (
         .jump_address(jump_address),
         .pc(pc)
     );
-    
-    // Instruction memory module
+
+
     instruction_memory imem (
         .address(pc),
         .instruction(instruction)
     );
     
-    // Instruction decoder module
+
     instruction_decoder idec (
         .instruction(instruction),
         .opcode(opcode),
@@ -84,7 +83,7 @@ module cpu (
         .is_j_type(is_j_type)
     );
     
-    // Control unit module
+
     control_unit ctrl (
         .opcode(opcode),
         .funct_r(funct_r),
@@ -99,7 +98,7 @@ module cpu (
         .alu_op(alu_op)
     );
     
-    // Register file module
+
     register_file regfile (
         .clk(clk),
         .reset(reset),
@@ -112,10 +111,10 @@ module cpu (
         .rs2_data(rs2_data)
     );
     
-    // ALU source mux
+ 
     assign alu_in2 = alu_src ? sign_extended_imm : rs2_data;
     
-    // ALU module
+
     alu alu_unit (
         .alu_op(alu_op),
         .operand1(rs1_data),
@@ -124,7 +123,7 @@ module cpu (
         .zero(zero)
     );
     
-    // Data memory module
+
     data_memory dmem (
         .clk(clk),
         .address(alu_result[9:0]),
@@ -134,10 +133,10 @@ module cpu (
         .read_data(mem_read_data)
     );
     
-    // Memory to register mux
+
     assign write_data = mem_to_reg ? mem_read_data : alu_result;
     
-    // Debug information
+
     always @(posedge clk) begin
         if (!reset) begin
             $display("==== CPU Cycle Information ====");
