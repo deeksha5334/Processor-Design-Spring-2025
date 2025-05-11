@@ -10,18 +10,18 @@ module tb_program1;
         .reset(reset)
     );
     
-    // Clock generation
+
     initial begin
         clk = 0;
         forever #5 clk = ~clk;  // 10ns clock period
     end
     
-    // Test procedure
+
     initial begin
-        // Initialize inputs
+
         reset = 1;
         
-        // Apply reset for a few clock cycles
+
         #20;
         reset = 0;
         
